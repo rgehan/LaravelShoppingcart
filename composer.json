@@ -1,5 +1,5 @@
 {
-  "name": "UnrankedSmurfs/laravel-shopping-cart",
+  "name": "rgehan/laravel-shopping-cart",
   "description": "Laravel Shoppingcart",
   "keywords": [
     "laravel",
@@ -32,9 +32,6 @@
     "psr-4": {
       "Gloudemans\\Tests\\Shoppingcart\\": "tests/"
     }
-  },
-  "suggest": {
-    "gloudemans/notify": "Simple flash notifications for Laravel"
   },
   "minimum-stability": "stable",
   "extra": {
