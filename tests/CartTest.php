@@ -85,7 +85,7 @@ class CartTest extends TestCase
         $this->assertItemsInCart(1, $cart->instance(Cart::DEFAULT_INSTANCE));
         $this->assertItemsInCart(1, $cart->instance('wishlist'));
     }
-    
+
     /** @test */
     public function it_can_add_an_item()
     {
@@ -931,7 +931,7 @@ class CartTest extends TestCase
 
     /**
      * Set the config number format.
-     * 
+     *
      * @param int    $decimals
      * @param string $decimalPoint
      * @param string $thousandSeperator

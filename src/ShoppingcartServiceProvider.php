@@ -29,7 +29,7 @@ class ShoppingcartServiceProvider extends ServiceProvider
             }
         });
 
-        if ( ! class_exists('CreateShoppingcartTable')) {
+        if (! class_exists('CreateShoppingcartTable')) {
             // Publish the migration
             $timestamp = date('Y_m_d_His', time());
 
