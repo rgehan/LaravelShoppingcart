@@ -72,7 +72,7 @@ class CartItem implements Arrayable, Jsonable
      * @param float      $price
      * @param array      $options
      */
-    public function __construct($id, $name, $price, array $options = [])
+    public function __construct($id, $name, $price, array $options = [], $model = null)
     {
         if (empty($id)) {
             throw new \InvalidArgumentException('Please supply a valid identifier.');
@@ -82,6 +82,10 @@ class CartItem implements Arrayable, Jsonable
         }
         if (strlen($price) < 0 || ! is_numeric($price)) {
             throw new \InvalidArgumentException('Please supply a valid price.');
+        }
+
+        if ($model) {
+            $this->associate($model);
         }
 
         $this->id       = $id;
@@ -103,7 +107,7 @@ class CartItem implements Arrayable, Jsonable
     {
         return $this->numberFormat($this->price, $decimals, $decimalPoint, $thousandSeperator);
     }
-    
+
     /**
      * Returns the formatted price with TAX.
      *
@@ -130,7 +134,7 @@ class CartItem implements Arrayable, Jsonable
     {
         return $this->numberFormat($this->subtotal, $decimals, $decimalPoint, $thousandSeperator);
     }
-    
+
     /**
      * Returns the formatted total.
      * Total is price for whole CartItem with TAX
@@ -157,7 +161,7 @@ class CartItem implements Arrayable, Jsonable
     {
         return $this->numberFormat($this->tax, $decimals, $decimalPoint, $thousandSeperator);
     }
-    
+
     /**
      * Returns the formatted tax.
      *
@@ -226,7 +230,7 @@ class CartItem implements Arrayable, Jsonable
     public function associate($model)
     {
         $this->associatedModel = is_string($model) ? $model : get_class($model);
-        
+
         return $this;
     }
 
@@ -239,7 +243,7 @@ class CartItem implements Arrayable, Jsonable
     public function setTaxRate($taxRate)
     {
         $this->taxRate = $taxRate;
-        
+
         return $this;
     }
 
@@ -258,11 +262,11 @@ class CartItem implements Arrayable, Jsonable
         if ($attribute === 'priceTax') {
             return $this->price + $this->tax;
         }
-        
+
         if ($attribute === 'subtotal') {
             return $this->qty * $this->price;
         }
-        
+
         if ($attribute === 'total') {
             return $this->qty * ($this->priceTax);
         }
@@ -270,7 +274,7 @@ class CartItem implements Arrayable, Jsonable
         if ($attribute === 'tax') {
             return $this->price * ($this->taxRate / 100);
         }
-        
+
         if ($attribute === 'taxTotal') {
             return $this->tax * $this->qty;
         }
@@ -291,7 +295,13 @@ class CartItem implements Arrayable, Jsonable
      */
     public static function fromBuyable(Buyable $item, array $options = [])
     {
-        return new self($item->getBuyableIdentifier($options), $item->getBuyableDescription($options), $item->getBuyablePrice($options), $options);
+        return new self(
+            $item->getBuyableIdentifier($options),
+            $item->getBuyableDescription($options),
+            $item->getBuyablePrice($options),
+            $options,
+            $item
+        );
     }
 
     /**
@@ -332,7 +342,7 @@ class CartItem implements Arrayable, Jsonable
     {
         ksort($options);
 
-        return md5($id . serialize($options));
+        return md5($id . serialize($options) . $this->associatedModel);
     }
 
     /**
