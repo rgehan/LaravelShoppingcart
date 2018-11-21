@@ -313,8 +313,15 @@ class CartItem implements Arrayable, Jsonable
     public static function fromArray(array $attributes)
     {
         $options = array_get($attributes, 'options', []);
+        $item = array_get($attributes, 'model', null);
 
-        return new self($attributes['id'], $attributes['name'], $attributes['price'], $options);
+        return new self(
+            $attributes['id'],
+            $attributes['name'],
+            $attributes['price'],
+            $options,
+            $item
+        );
     }
 
     /**
@@ -326,9 +333,9 @@ class CartItem implements Arrayable, Jsonable
      * @param array      $options
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public static function fromAttributes($id, $name, $price, array $options = [])
+    public static function fromAttributes($id, $name, $price, array $options = [], $item = null)
     {
-        return new self($id, $name, $price, $options);
+        return new self($id, $name, $price, $options, $item);
     }
 
     /**
